@@ -1,42 +1,142 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-   <script src="node_modules/tracking/build/tracking-min.js"></script>
-   <script src="node_modules/tracking/build/data/face-min.js"></script>
-   <script src="node_modules/tracking/build/data/eye-min.js"></script>
-   <style>
-       video,canvas{
-           margin-left: 0px;
-           margin-top: 0px;
-           position: absolute;
-       }
-   </style>
-   <meta charset="UTF-8">
-   <title>Reconhecimento Facial</title>
+    <script src="node_modules/tracking/build/tracking-min.js"></script>
+    <script src="node_modules/tracking/build/data/face-min.js"></script>
+    <script src="node_modules/tracking/build/data/eye-min.js"></script>
+    <script src="node_modules/dat.gui/build/dat.gui.min.js"></script>
+    <style>
+        video,
+        canvas {
+            margin-left: 10px;
+            margin-top: 10px;
+            position: absolute;
+        }
+
+  #video:hover .rect {
+    opacity: .75;
+    transition: opacity .75s ease-out;
+  }
+
+  .rect:hover * {
+    opacity: 1;
+  }
+
+  .rect {
+    border-radius: 2px;
+    border: 3px solid white;
+    box-shadow: 0 16px 28px 0 rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    left: -1000px;
+    opacity: 0;
+    position: absolute;
+    top: -1000px;
+  }
+
+  .arrow {
+    border-bottom: 10px solid white;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    height: 0;
+    width: 0;
+    position: absolute;
+    left: 50%;
+    margin-left: -5px;
+    bottom: -12px;
+    opacity: 0;
+  }
+
+  input {
+    border: 0px;
+    bottom: -42px;
+    color: #a64ceb;
+    font-size: 15px;
+    height: 30px;
+    left: 50%;
+    margin-left: -90px;
+    opacity: 0;
+    outline: none;
+    position: absolute;
+    text-align: center;
+    width: 180px;
+    transition: opacity .35s ease-out;
+  }
+
+  #img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -173px 0 0 -300px;
+  }
+  </style>
+    <meta charset="UTF-8">
+    <title>Reconhecimento Facial</title>
 </head>
+
 <body>
-   <video id="video" width="480" height="240" preload autoplay loop muted></video>
-   <canvas id="canvas" width="480" height="240"></canvas>
-   <script>
+    <video id="video" width="480" height="240" preload autoplay loop muted></video>
+    <canvas id="canvas" width="480" height="240"></canvas>
+    <script>
 
-       window.onload = function(){
-           var video = document.getElementById('video');
-           var canvas = document.getElementById('canvas');
-           var context = canvas.getContext('2d');
+        window.onload = function () {
 
-           var tracker = new tracking.ObjectTracker('face');
-           tracking.track('#video', tracker, {camera: true});
-           tracker.on('track', event => {
-               console.log('Procurando por rostos...');
+            var video = document.getElementById('video');
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
 
-               context.clearRect(0,0, canvas.width, canvas.height);
-               event.data.forEach( rect => {
-                   context.strokeStyle = 'blue';
-                   context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-                   context.fillStyle = 'red';
-               });
-           });
-       }
-   </script>
+            var tracker = new tracking.ObjectTracker('face');
+            tracking.track('#video', tracker, { camera: true });
+            tracker.on('track', event => {
+                console.log("procurando");
+
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                event.data.forEach(rect => {
+
+                    context.strokeStyle = 'blue';
+                    context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+                    context.font = '15px Arial';
+                    context.fillStyle = "blue";
+                    context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+                    context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+                    context.fillText('height: ' + rect.height + 'px', rect.x + rect.width + 5, rect.y + 33);
+                    context.fillText('width: ' + rect.width + 'px', rect.x + rect.width + 5, rect.y + 44);
+                    context.fillText('total: ' + rect.total + 'px', rect.x + rect.width + 5, rect.y + 55);
+
+                    plotRectangle(rect.x, rect.y, rect.width, rect.height);
+                    console.log(rect);
+                });
+            });
+
+            var friends = ['Rubens' ];
+
+
+            var plotRectangle = function (x, y, w, h) {
+                var rect = document.createElement('div');
+                var arrow = document.createElement('div');
+                var input = document.createElement('input');
+
+                input.value = friends.pop();
+
+                rect.onclick = function name() {
+                    input.select();
+                };
+
+                arrow.classList.add('arrow');
+                rect.classList.add('rect');
+
+                rect.appendChild(input);
+                rect.appendChild(arrow);
+                document.getElementById('video').appendChild(rect);
+
+                rect.style.width = w + 'px';
+                rect.style.height = h + 'px';
+                rect.style.left = (video.offsetLeft + x) + 'px';
+                rect.style.top = (video.offsetTop + y) + 'px';
+            };
+
+        }
+    </script>
 </body>
+
 </html>
