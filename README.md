@@ -1,4 +1,4 @@
-# reconhecimento-facial
+# Reconhecimento-Facial-Tracking.js
 .
 
 Dependencias no Windows
