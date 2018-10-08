@@ -1,5 +1,5 @@
 # Reconhecimento-Facial-Tracking.js
-Esse codigo é capaz de reconhecer que exite um rosto em frente a uma camera isso tudo em Javascript usando o Trackin.js, porem não concegui fazer o reconhecimento de que tal pessoa está na camera exibindo o nome dela com base em fotografias já tiradas da pessoas.
+Esse código é capaz de reconhecer que exite um rosto em frente a uma câmera isso tudo em Javascript usando o Trackin.js, porem não consegui fazer o reconhecimento de que tal pessoa está na câmera exibindo o nome dela com base em fotografias já tiradas da pessoas.
 
 # Dependencias no Windows
 Python 2.7.15
